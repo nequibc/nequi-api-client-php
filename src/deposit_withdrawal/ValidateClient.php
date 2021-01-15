@@ -44,6 +44,7 @@ class ValidateClient {
                 'RequestBody' => array(
                     'any' => array(
                         'validateClientRQ' => array(
+                            // 'phoneNumber' => '399876464300', // Reemplace por este número para experimentar un error
                             'phoneNumber' => '3998764643',
                             'value' => '10000'
                         )
