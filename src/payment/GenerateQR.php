@@ -5,7 +5,7 @@ require_once __DIR__ . '/../AuthController.php';
 require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 
-class GenerateQRController {
+class GenerateQR {
     const RestEndpoint = '/payments/v2/-services-paymentservice-generatecodeqr';
     static $logs = array();
 
@@ -82,9 +82,9 @@ class GenerateQRController {
 }
 
 try {
-    GenerateQRController::call();
+    GenerateQR::call();
 } catch (Exception $e) {
-    GenerateQRController::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    GenerateQR::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -104,7 +104,7 @@ try {
             <h2 class="subtitle">Generar código QR</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php foreach(GenerateQRController::$logs as $log) { ?>
+            <?php foreach(GenerateQR::$logs as $log) { ?>
                 <div class="has-text-<?php echo $log['type']; ?>">
                     <?php echo '>' . $log['msg'] ?>
                 </div>

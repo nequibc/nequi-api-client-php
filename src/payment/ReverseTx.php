@@ -5,7 +5,7 @@ require_once __DIR__ . '/../AuthController.php';
 require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 
-class ReverseTxController {
+class ReverseTx {
     const RestEndpoint = '/payments/v2/-services-reverseservices-reversetransaction';
     static $logs = array();
 
@@ -86,9 +86,9 @@ class ReverseTxController {
 }
 
 try {
-    ReverseTxController::call();
+    ReverseTx::call();
 } catch (Exception $e) {
-    ReverseTxController::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    ReverseTx::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -108,7 +108,7 @@ try {
             <h2 class="subtitle">Reversar transacción</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php foreach(ReverseTxController::$logs as $log) { ?>
+            <?php foreach(ReverseTx::$logs as $log) { ?>
                 <div class="has-text-<?php echo $log['type']; ?>">
                     <?php echo '>' . $log['msg'] ?>
                 </div>

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../AuthController.php';
 require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 
-class GetStatusPaymentController {
+class GetStatusPayment {
     const RestEndpoint = '/payments/v2/-services-paymentservice-getstatuspayment';
     static $logs = array();
 
@@ -78,9 +78,9 @@ class GetStatusPaymentController {
 }
 
 try {
-    GetStatusPaymentController::call();
+    GetStatusPayment::call();
 } catch (Exception $e) {
-    GetStatusPaymentController::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    GetStatusPayment::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -100,7 +100,7 @@ try {
             <h2 class="subtitle">Consultar el estado de un pago</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php foreach(GetStatusPaymentController::$logs as $log) { ?>
+            <?php foreach(GetStatusPayment::$logs as $log) { ?>
                 <div class="has-text-<?php echo $log['type']; ?>">
                     <?php echo '>' . $log['msg'] ?>
                 </div>
