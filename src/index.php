@@ -124,6 +124,30 @@ $appCfg = new AppConf;
                             </span>
                             <a href="./deposit_withdrawal/ValidateClient.php">Validar cliente</a>
                         </li>
+                        <li>
+                            <span class="icon">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </span>
+                            <a href="./deposit_withdrawal/ChargeAccount.php">Recargar una cuenta</a>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <i class="fas fa-search-dollar"></i>
+                            </span>
+                            <a href="./deposit_withdrawal/CheckWithdrawalRequest.php">Verificar solicitud retiro</a>
+                        </li>
+                    </ul>
+
+                    <ul class="mt-4">
+                        <h3 class="title is-4 mt-1">
+                            Pagos con Notificación
+                        </h3>
+                        <li>
+                            <span class="icon">
+                                <i class="fas fa-money-bill-alt"></i>
+                            </span>
+                            <a href="./payment_push/UnregisteredPaymentRequest.php">Solicitu de pago</a>
+                        </li>
                     </ul>
                 </p2>
             </div>

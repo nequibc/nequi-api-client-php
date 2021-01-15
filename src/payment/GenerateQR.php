@@ -69,7 +69,12 @@ class GenerateQR {
                 $statusDesc = isset($status) ? $status->StatusDesc : '';
 
                 if ($statusCode == Constants::NEQUI_STATUS_CODE_SUCCESS) {
-                    echo 'Rebientos';
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Código generado correctamente');
+
+                    $qr = $response->ResponseMessage->ResponseBody->any->generateCodeQRRS;
+                    $qrCode = isset($qr) ? $qr->codeQR : '';
+
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Código QR:' . $qrCode);
                 } else {
                     throw new Exception('Error ' . $statusCode . ' = ' . $statusDesc);
                 }

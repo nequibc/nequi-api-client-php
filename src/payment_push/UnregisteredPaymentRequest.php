@@ -6,8 +6,8 @@ require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 require_once __DIR__ . '/../utils/Utils.php';
 
-class ReverseTx {
-    const RestEndpoint = '/payments/v2/-services-reverseservices-reversetransaction';
+class UnregisteredPaymentRequest {
+    const RestEndpoint = '/payments/v2/-services-paymentservice-unregisteredpayment';
     static $logs = array();
 
     public static function call() {
@@ -30,32 +30,33 @@ class ReverseTx {
         $body = json_encode(array(
             'RequestMessage' => array(
                 'RequestHeader' => array(
-                    'Channel' => 'PQR03-C001',
+                    'Channel' => 'PNP04-C001',
                     'RequestDate' => '2020-01-14T10:26:12.654Z',
                     'MessageID' => '1234567890',
                     'ClientID' => $appCfg->getClientId(),
                     'Destination' => array(
-                        'ServiceName' => 'reverseServices',
-                        'ServiceOperation' => 'reverseTransaction',
+                        'ServiceName' => 'PaymentsService',
+                        'ServiceOperation' => 'unregisteredPayment',
                         'ServiceRegion' => 'C001',
-                        'ServiceVersion' => '1.0.0'
+                        'ServiceVersion' => '1.2.0'
                     )
                 ),
                 'RequestBody' => array(
                     'any' => array(
-                        'reversionRQ' => array(
-                            'phoneNumber' => '3998764643',
-                            'value' => '0',
+                        'unregisteredPaymentRQ' => array(
+                            'phoneNumber'=> '3998764643',
                             'code' => 'NIT_1',
-                            'messageId' => '9857836163',
-                            'type' => 'payment'
+                            'value' => '1',
+                            'reference1' => 'Referencia numero 1',
+                            'reference2' => 'Referencia numero 2',
+                            'reference3' => 'Referencia numero 3'
                         )
                     )
                 )
             )
         ));
 
-        self::$logs[] = array('type' => 'info', 'msg' => 'Listo para la enviar la petición<br/>');
+        self::$logs[] = array('type' => 'info', 'msg' => 'Listo para la enviar la petición');
 
         $request = Requests::post($endpoint, $headers, $body, $options);
 
@@ -73,7 +74,12 @@ class ReverseTx {
                 $statusDesc = isset($status) ? $status->StatusDesc : '';
 
                 if ($statusCode == Constants::NEQUI_STATUS_CODE_SUCCESS) {
-                    self::$logs[] = array('type' => 'success', 'msg' => 'Reversión procesada correctamente');
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Solicitud de pago realizada correctamente');
+
+                    $payment = $response->ResponseMessage->ResponseBody->any->unregisteredPaymentRS;
+                    $trnId = isset($payment) ? trim($payment->transactionId) : '';
+
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Id Transacción:' . $trnId);
                 } else {
                     throw new Exception('Error ' . $statusCode . ' = ' . $statusDesc);
                 }
@@ -87,9 +93,9 @@ class ReverseTx {
 }
 
 try {
-    ReverseTx::call();
+    UnregisteredPaymentRequest::call();
 } catch (Exception $e) {
-    ReverseTx::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    UnregisteredPaymentRequest::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -105,11 +111,11 @@ try {
     </head>
     <body>
         <div class="container p-2">
-            <h1 class="title">Pagos con código QR</h1>
-            <h2 class="subtitle">Reversar transacción</h2>
+            <h1 class="title">Pagos con Notificación</h1>
+            <h2 class="subtitle">Solicitud de pago</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php Utils::printLogs(ReverseTx::$logs); ?>
+            <?php Utils::printLogs(UnregisteredPaymentRequest::$logs); ?>
         </div>
         <footer class="container mt-3">
             <a class="button is-primary is-outlined" href="/">

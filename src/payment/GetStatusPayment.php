@@ -65,7 +65,23 @@ class GetStatusPayment {
                 $statusDesc = isset($status) ? $status->StatusDesc : '';
 
                 if ($statusCode == Constants::NEQUI_STATUS_CODE_SUCCESS) {
-                    echo 'Rebientos';
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Código generado correctamente');
+
+                    $payment = $response->ResponseMessage->ResponseBody->any->getStatusPaymentRS;
+                    $originMoney = $payment->originMoney;
+                    $paymentStatus = isset($payment) ? $payment->status : '';
+                    $paymentName = isset($payment) ? $payment->name : '';
+                    $paymentValue = isset($payment) ? $payment->value : '';
+                    $paymentTrnId = isset($payment) ? trim($payment->trnId) : '';
+                    $originMoneyName = isset($originMoney) ? $originMoney->name : '';
+                    $originMoneyValue = isset($originMoney) ? $originMoney->value : '';
+
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Estado del pago:' . $paymentStatus);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Nombre del pago:' . $paymentName);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Valor del pago:' . $paymentValue);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Id transacción del pago:' . $paymentTrnId);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Nombre origen del dinero:' . $originMoneyName);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Valor origen del dinero:' . $originMoneyValue);
                 } else {
                     throw new Exception('Error ' . $statusCode . ' = ' . $statusDesc);
                 }

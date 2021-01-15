@@ -6,8 +6,8 @@ require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 require_once __DIR__ . '/../utils/Utils.php';
 
-class ReverseTx {
-    const RestEndpoint = '/payments/v2/-services-reverseservices-reversetransaction';
+class ChargeAccount {
+    const RestEndpoint = '/agents/v2/-services-cashinservice-cashin';
     static $logs = array();
 
     public static function call() {
@@ -30,32 +30,30 @@ class ReverseTx {
         $body = json_encode(array(
             'RequestMessage' => array(
                 'RequestHeader' => array(
-                    'Channel' => 'PQR03-C001',
+                    'Channel' => 'MF-001',
                     'RequestDate' => '2020-01-14T10:26:12.654Z',
                     'MessageID' => '1234567890',
                     'ClientID' => $appCfg->getClientId(),
                     'Destination' => array(
-                        'ServiceName' => 'reverseServices',
-                        'ServiceOperation' => 'reverseTransaction',
+                        'ServiceName' => 'CashInService',
+                        'ServiceOperation' => 'cashIn',
                         'ServiceRegion' => 'C001',
                         'ServiceVersion' => '1.0.0'
                     )
                 ),
                 'RequestBody' => array(
                     'any' => array(
-                        'reversionRQ' => array(
+                        'cashInRQ' => array(
                             'phoneNumber' => '3998764643',
-                            'value' => '0',
-                            'code' => 'NIT_1',
-                            'messageId' => '9857836163',
-                            'type' => 'payment'
+                            'code' => '1',
+                            'value' => '2500'
                         )
                     )
                 )
             )
         ));
 
-        self::$logs[] = array('type' => 'info', 'msg' => 'Listo para la enviar la petición<br/>');
+        self::$logs[] = array('type' => 'info', 'msg' => 'Listo para la enviar la petición');
 
         $request = Requests::post($endpoint, $headers, $body, $options);
 
@@ -73,7 +71,16 @@ class ReverseTx {
                 $statusDesc = isset($status) ? $status->StatusDesc : '';
 
                 if ($statusCode == Constants::NEQUI_STATUS_CODE_SUCCESS) {
-                    self::$logs[] = array('type' => 'success', 'msg' => 'Reversión procesada correctamente');
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Recarga realizada correctamente');
+
+                    $finacle = $response->ResponseMessage->ResponseBody->any->cashInRS;
+                    $trnId = isset($finacle) ? trim($finacle->trnId) : '';
+                    $trnDate = isset($finacle) ? $finacle->date : '';
+                    $name = isset($finacle) ? $finacle->name : '';
+
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Id Transacción:' . $trnId);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Fecha Transacción:' . $trnDate);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Fecha Transacción:' . $name);
                 } else {
                     throw new Exception('Error ' . $statusCode . ' = ' . $statusDesc);
                 }
@@ -87,9 +94,9 @@ class ReverseTx {
 }
 
 try {
-    ReverseTx::call();
+    ChargeAccount::call();
 } catch (Exception $e) {
-    ReverseTx::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    ChargeAccount::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -105,11 +112,11 @@ try {
     </head>
     <body>
         <div class="container p-2">
-            <h1 class="title">Pagos con código QR</h1>
-            <h2 class="subtitle">Reversar transacción</h2>
+            <h1 class="title">Depósitos y Retiros</h1>
+            <h2 class="subtitle">Recargar una cuenta</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php Utils::printLogs(ReverseTx::$logs); ?>
+            <?php Utils::printLogs(ChargeAccount::$logs); ?>
         </div>
         <footer class="container mt-3">
             <a class="button is-primary is-outlined" href="/">
