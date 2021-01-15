@@ -6,8 +6,8 @@ require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
 require_once __DIR__ . '/../utils/Utils.php';
 
-class GenerateQR {
-    const RestEndpoint = '/payments/v2/-services-paymentservice-generatecodeqr';
+class ValidateClient {
+    const RestEndpoint = '/agents/v2/-services-clientservice-validateclient';
     static $logs = array();
 
     public static function call() {
@@ -21,30 +21,31 @@ class GenerateQR {
             'x-api-key' => $appCfg->getApiKey()
         );
 
+        $options = array(
+            'timeout' => 30
+        );
+
         $endpoint = $appCfg->getApiBasePath() . self::RestEndpoint;
 
         $body = json_encode(array(
             'RequestMessage' => array(
                 'RequestHeader' => array(
-                    'Channel' => 'PQR03-C001',
+                    'Channel' => 'MF-001',
                     'RequestDate' => '2020-01-14T10:26:12.654Z',
                     'MessageID' => '1234567890',
                     'ClientID' => $appCfg->getClientId(),
                     'Destination' => array(
-                        'ServiceName' => 'PaymentsService',
-                        'ServiceOperation' => 'generateCodeQR',
+                        'ServiceName' => 'RechargeService',
+                        'ServiceOperation' => 'validateClient',
                         'ServiceRegion' => 'C001',
-                        'ServiceVersion' => '1.2.0'
+                        'ServiceVersion' => '1.4.0'
                     )
                 ),
                 'RequestBody' => array(
                     'any' => array(
-                        'generateCodeQRRQ' => array(
-                            'code' => 'NIT_1',
-                            'value' => '10000',
-                            'reference1' => 'Referencia numero 1',
-                            'reference2' => 'Referencia numero 2',
-                            'reference3' => 'Referencia numero 3'
+                        'validateClientRQ' => array(
+                            'phoneNumber' => '3998764643',
+                            'value' => '10000'
                         )
                     )
                 )
@@ -53,7 +54,7 @@ class GenerateQR {
 
         self::$logs[] = array('type' => 'info', 'msg' => 'Listo para la enviar la petición');
 
-        $request = Requests::post($endpoint, $headers, $body);
+        $request = Requests::post($endpoint, $headers, $body, $options);
 
         if (
             isset($request->status_code) && $request->status_code == 200 
@@ -69,7 +70,14 @@ class GenerateQR {
                 $statusDesc = isset($status) ? $status->StatusDesc : '';
 
                 if ($statusCode == Constants::NEQUI_STATUS_CODE_SUCCESS) {
-                    echo 'Rebientos';
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Cliente validado correctamente');
+
+                    $client = $response->ResponseMessage->ResponseBody->any->validateClientRS;
+                    $customerName = isset($client) ? $client->customerName : '';
+                    $availableLimit = isset($client) ? $client->availableLimit : '';
+
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Nombre del cliente:' . $customerName);
+                    self::$logs[] = array('type' => 'success', 'msg' => 'Límite disponible:' . $availableLimit);
                 } else {
                     throw new Exception('Error ' . $statusCode . ' = ' . $statusDesc);
                 }
@@ -83,9 +91,9 @@ class GenerateQR {
 }
 
 try {
-    GenerateQR::call();
+    ValidateClient::call();
 } catch (Exception $e) {
-    GenerateQR::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
+    ValidateClient::$logs[] = array('type' => 'danger', 'msg' => $e->getMessage());
 }
 
 ?>
@@ -101,11 +109,11 @@ try {
     </head>
     <body>
         <div class="container p-2">
-            <h1 class="title">Pagos con código QR</h1>
-            <h2 class="subtitle">Generar código QR</h2>
+            <h1 class="title">Depósitos y Retiros</h1>
+            <h2 class="subtitle">Validar cliente</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php Utils::printLogs(GenerateQR::$logs); ?>
+            <?php Utils::printLogs(ValidateClient::$logs); ?>
         </div>
         <footer class="container mt-3">
             <a class="button is-primary is-outlined" href="/">

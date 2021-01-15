@@ -93,7 +93,6 @@ $appCfg = new AppConf;
                     <ul>
                         <h3 class="title is-4 mt-1">
                             Pagos con código QR
-                            <i class="fas fa-info-circle"></i>
                         </h3>
                         <li>
                             <span class="icon">
@@ -112,6 +111,18 @@ $appCfg = new AppConf;
                                 <i class="fas fa-undo"></i>
                             </span>
                             <a href="./payment/ReverseTx.php">Reversar un transacción</a>
+                        </li>
+                    </ul>
+
+                    <ul class="mt-4">
+                        <h3 class="title is-4 mt-1">
+                            Depósitos y Retiros
+                        </h3>
+                        <li>
+                            <span class="icon">
+                                <i class="fas fa-user-shield"></i>
+                            </span>
+                            <a href="./deposit_withdrawal/ValidateClient.php">Validar cliente</a>
                         </li>
                     </ul>
                 </p2>

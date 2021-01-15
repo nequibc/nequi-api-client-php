@@ -4,6 +4,7 @@ require_once __DIR__ . '/../AppConf.php';
 require_once __DIR__ . '/../AuthController.php';
 require_once __DIR__ . '/../lib/requests/Requests.php';
 require_once __DIR__ . '/../utils/Constants.php';
+require_once __DIR__ . '/../utils/Utils.php';
 
 class ReverseTx {
     const RestEndpoint = '/payments/v2/-services-reverseservices-reversetransaction';
@@ -108,11 +109,7 @@ try {
             <h2 class="subtitle">Reversar transacción</h2>
 
             <h5 class="subtitle is-5">Logs</h5>
-            <?php foreach(ReverseTx::$logs as $log) { ?>
-                <div class="has-text-<?php echo $log['type']; ?>">
-                    <?php echo '>' . $log['msg'] ?>
-                </div>
-            <?php } ?>
+            <?php Utils::printLogs(ReverseTx::$logs); ?>
         </div>
         <footer class="container mt-3">
             <a class="button is-primary is-outlined" href="/">
