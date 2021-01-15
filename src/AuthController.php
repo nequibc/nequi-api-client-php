@@ -1,7 +1,7 @@
 <?php
 
-require_once './AppConf.php';
-require_once './lib/requests/Requests.php';
+require_once __DIR__ . '/AppConf.php';
+require_once __DIR__ . '/lib/requests/Requests.php';
 
 Requests::register_autoloader();
 

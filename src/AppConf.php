@@ -3,6 +3,7 @@
 class AppConf {
     private $clientId = null; 
     private $clientSecret = null;
+    private $apiKey = null;
     private $authUri = null;
     private $authGrantType = null;
     private $apiBasePath = null;
@@ -14,6 +15,7 @@ class AppConf {
     private function loadEnvVars() {
         $this->clientId = getenv('NEQUI_CLIENT_ID');
         $this->clientSecret = getenv('NEQUI_CLIENT_SECRET');
+        $this->apiKey = getenv('NEQUI_API_KEY');
         $this->authUri = getenv('NEQUI_AUTH_URI');
         $this->authGrantType = getenv('NEQUI_AUTH_GRANT_TYPE');
         $this->apiBasePath = getenv('NEQUI_API_BASE_PATH');
@@ -25,6 +27,10 @@ class AppConf {
 
     public function getClientSecret() {
         return $this->clientSecret;
+    }
+
+    public function getApiKey() {
+        return $this->apiKey;
     }
 
     public function getAuthUri() {
