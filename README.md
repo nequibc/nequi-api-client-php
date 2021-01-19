@@ -59,19 +59,12 @@ Esta sección cuenta con 1 ejemplo que podrá encontrar alojados en la carpeta `
 
 - **Solicitu de pago**: En el archivo ```/src/payment_push/UnregisteredPaymentRequest.php``` podrá encontrar el código para solicitar un pago mediante notificación push.
 
-Éste ejemplo esta compuesto por 4 archivos:
-
-- keys.php: Definición de las llaves como variables para el consumo del API.
-- awsSigner.php: Permite consumir cualquier recurso del API firmando la petición con el mecanismo de seguridad AWS Sv4.
-- clientAPI.php: Define las funciones que representan los recursos expuestos en el API.
-- index.php: Ejemplo del consumo de las funciones expuestas en el client del API de Nequi.
-
 ## 3. Ejecutar los ejemplos
 
 Para ver en funcionamiento de los ejemplos, descargue los fuentes, desplieguelos en cualquier servidor donde corra PHP(7.x), puede ser Apache, y acceda al archivo ```/src/index.php``` desde un navegador web.
 
 Si lo desea también puede desplegar estos ejemplos usando [docker](https://www.docker.com/) y [docker-compose](https://docs.docker.com/compose/), ejecutando el siguiente comando en la raíz del proyecto:
-- ```docker-compose up```: Este comando puede tomar unos minutos mientras se descargan los recursos necesarios, al final quedará la terminal de comandos en modo activo, lo cual le permitirá detener el despliegue presionando ```Ctrl + c```.
+- ```docker-compose up```: Este comando puede tomar unos minutos mientras se descargan los recursos necesarios, al final quedará la terminal de comandos en modo activo, lo cual le permitirá detener el despliegue presionando ```Ctrl + c```. Ahora podrá acceder desde un navegador a ```localhost:8000```.
 
 ## 4. Información adicional
 
